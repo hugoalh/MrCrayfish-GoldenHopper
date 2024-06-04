@@ -1,14 +1,17 @@
 package com.mrcrayfish.goldenhopper.data;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.data.recipes.RecipeProvider;
 
+import java.util.concurrent.CompletableFuture;
+
 public class ForgeRecipeGen extends RecipeProvider
 {
-    public ForgeRecipeGen(PackOutput output)
+    public ForgeRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> lookupProvider)
     {
-        super(output);
+        super(output, lookupProvider);
     }
 
     @Override

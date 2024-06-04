@@ -5,6 +5,7 @@ import com.mrcrayfish.goldenhopper.core.ModItems;
 import com.mrcrayfish.goldenhopper.data.ForgeBlockTagGen;
 import com.mrcrayfish.goldenhopper.data.ForgeLootTableGen;
 import com.mrcrayfish.goldenhopper.data.ForgeRecipeGen;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -14,6 +15,8 @@ import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Author: MrCrayfish
@@ -38,9 +41,10 @@ public class GoldenHopper
     {
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
-        generator.addProvider(event.includeServer(), new ForgeRecipeGen(output));
-        generator.addProvider(event.includeServer(), new ForgeLootTableGen(output));
-        generator.addProvider(event.includeServer(), new ForgeBlockTagGen(output, event.getLookupProvider(), event.getExistingFileHelper()));
+        CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+        generator.addProvider(event.includeServer(), new ForgeRecipeGen(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new ForgeLootTableGen(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new ForgeBlockTagGen(output, lookupProvider, event.getExistingFileHelper()));
     }
 
     private void onCreativeTabBuilding(BuildCreativeModeTabContentsEvent event)

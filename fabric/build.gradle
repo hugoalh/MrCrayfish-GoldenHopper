@@ -1,33 +1,26 @@
 plugins {
-    id 'java'
-    id 'idea'
-    id 'maven-publish'
-    id 'fabric-loom' version '1.2-SNAPSHOT'
+    id 'multiloader-loader'
+    id 'fabric-loom' version '1.6-SNAPSHOT'
 }
 
-base {
-    archivesName = "${mod_id}-fabric"
-}
-
-sourceSets {
-    main {
-        resources {
-            srcDirs += [
-                    'src/generated/resources'
-            ]
+repositories {
+    exclusiveContent {
+        forRepository {
+            maven {
+                name = "TerraformersMC"
+                url = "https://maven.terraformersmc.com/"
+            }
+        }
+        filter {
+            includeGroup("com.terraformersmc")
         }
     }
 }
 
-repositories {
-    maven {
-        name = "TerraformersMC"
-        url = "https://maven.terraformersmc.com/"
+fabricApi {
+    configureDataGeneration {
+        outputDirectory.set(file("src/generated"))
     }
-}
-
-configurations {
-    implementation.extendsFrom library
 }
 
 dependencies {
@@ -36,109 +29,18 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
     modImplementation "com.mrcrayfish:framework-fabric:${minecraft_version}-${framework_version}"
-    modCompileOnlyApi "com.terraformersmc:modmenu:${modmenu_version}"
-    implementation "com.google.code.findbugs:jsr305:3.0.2"
-    implementation project(":common")
     modRuntimeOnly "com.mrcrayfish:catalogue-fabric:${minecraft_version}-${catalogue_version}"
+    modRuntimeOnly "com.terraformersmc:modmenu:${modmenu_version}"
 }
 
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
 loom {
-    if (file("src/main/resources/${mod_id}.accesswidener").exists()) {
-        accessWidenerPath.set(file("src/main/resources/${mod_id}.accesswidener"))
+    def aw = project(":common").file("src/main/resources/${mod_id}.accesswidener")
+    if (aw.exists()) {
+        accessWidenerPath.set(aw)
     }
     mixin {
         defaultRefmapName.set("${mod_id}.refmap.json")
     }
-    runs {
-        client {
-            client()
-            setConfigName("Fabric Client")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-        server {
-            server()
-            setConfigName("Fabric Server")
-            ideConfigGenerated(true)
-            runDir("run")
-        }
-        datagen {
-            inherit client
-            setConfigName("Fabric Data")
-            ideConfigGenerated(true)
-            vmArg "-Dfabric-api.datagen"
-            vmArg "-Dfabric-api.datagen.output-dir=${file("src/generated/resources")}"
-            vmArg "-Dfabric-api.datagen.modid=${mod_id}"
-            runDir "build/datagen"
-        }
-    }
 }
-
-tasks.withType(JavaCompile).configureEach {
-    source(project(":common").sourceSets.main.allSource)
-}
-tasks.withType(Javadoc).configureEach {
-    source(project(":common").sourceSets.main.allJava)
-}
-tasks.named("sourcesJar", Jar) {
-    from(project(":common").sourceSets.main.allSource)
-}
-
-processResources {
-    from project(":common").sourceSets.main.resources
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId project.group
-            artifactId project.archivesBaseName
-            version project.version
-
-            artifact remapJar
-            artifact(sourcesJar) {
-                builtBy remapSourcesJar
-            }
-
-            pom.withXml {
-                def depsNode = asNode().appendNode('dependencies')
-                [this.configurations.library].each {
-                    it.allDependencies.each {
-                        def depNode = depsNode.appendNode('dependency')
-                        depNode.appendNode('groupId', it.group)
-                        depNode.appendNode('artifactId', it.name)
-                        depNode.appendNode('version', it.version)
-                    }
-                }
-            }
-        }
-    }
-
-    repositories {
-        if (System.getenv("CI")) {
-            maven {
-                name = "GitHubPackages"
-                url = "https://maven.pkg.github.com/MrCrayfish/Maven"
-                credentials {
-                    username = project.findProperty("gpr.user") ?: System.getenv("GPR_USER")
-                    password = project.findProperty("gpr.key") ?: System.getenv("GPR_KEY")
-                }
-            }
-        } else {
-            maven {
-                url "file://" + System.getenv("LOCAL_MAVEN")
-            }
-        }
-    }
-}
-
-signing {
-    if (System.getenv("SIGNING_KEY")) {
-        def signingKey = System.getenv("SIGNING_KEY")
-        def signingPassword = System.getenv("SIGNING_PASSPHRASE")
-        useInMemoryPgpKeys(signingKey, signingPassword)
-    }
-    sign publishing.publications.mavenJava
-}
-
-loom.disableDeprecatedPomGeneration(publishing.publications.mavenJava)
