@@ -1,7 +1,7 @@
 package com.mrcrayfish.goldenhopper.world.vehicle;
 
 import com.mrcrayfish.goldenhopper.core.ModItems;
-import com.mrcrayfish.goldenhopper.world.entity.vehicle.GoldenHopperMinecart;
+import com.mrcrayfish.goldenhopper.entity.vehicle.GoldenHopperMinecart;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
@@ -14,11 +14,6 @@ import java.util.stream.IntStream;
  */
 public class FabricGoldenHopperMinecart extends GoldenHopperMinecart
 {
-    public FabricGoldenHopperMinecart(EntityType<?> type, Level level)
-    {
-        super(type, level);
-    }
-
     public FabricGoldenHopperMinecart(Level level, double x, double y, double z)
     {
         super(level, x, y, z);

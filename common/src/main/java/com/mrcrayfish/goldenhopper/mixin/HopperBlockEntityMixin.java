@@ -1,15 +1,16 @@
 package com.mrcrayfish.goldenhopper.mixin;
 
-import com.mrcrayfish.goldenhopper.world.level.block.entity.AbstractHopperBlockEntity;
-import net.minecraft.core.Direction;
-import net.minecraft.world.Container;
-import net.minecraft.world.item.ItemStack;
+import com.mrcrayfish.goldenhopper.blockentity.GoldenHopperBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+
+import java.util.function.BooleanSupplier;
 
 /**
  * Author: MrCrayfish
@@ -17,21 +18,18 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(HopperBlockEntity.class)
 public class HopperBlockEntityMixin
 {
-    private static boolean goldenhopperWasEmpty;
-
-    // Normally I wouldn't do this but the bytecode was different on Fabric.
-    @Inject(method = "tryMoveInItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"), locals = LocalCapture.CAPTURE_FAILHARD)
-    private static void goldenhopperTryMoveInItemCapture(Container source, Container target, ItemStack $$2, int slotIndex, Direction face, CallbackInfoReturnable<ItemStack> cir, ItemStack stack, boolean movedItem, boolean wasEmpty)
+    @Inject(method = "tryMoveItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/HopperBlockEntity;isEmpty()Z"))
+    private static void goldenHopper$beforeEject(Level level, BlockPos pos, BlockState state, HopperBlockEntity hopper, BooleanSupplier $$4, CallbackInfoReturnable<Boolean> cir)
     {
-        goldenhopperWasEmpty = wasEmpty;
+        if(hopper instanceof GoldenHopperBlockEntity)
+        {
+            GoldenHopperBlockEntity.ejecting = true;
+        }
     }
 
-    @Inject(method = "tryMoveInItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setChanged()V"))
-    private static void goldenhopperTryMoveInItem(Container source, Container target, ItemStack $$2, int slotIndex, Direction face, CallbackInfoReturnable<ItemStack> cir)
+    @Inject(method = "tryMoveItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/block/entity/HopperBlockEntity;inventoryFull()Z"))
+    private static void goldenHopper$afterEject(Level level, BlockPos pos, BlockState state, HopperBlockEntity hopper, BooleanSupplier $$4, CallbackInfoReturnable<Boolean> cir)
     {
-        if(goldenhopperWasEmpty)
-        {
-            AbstractHopperBlockEntity.applyTransferCooldown(source, target);
-        }
+        GoldenHopperBlockEntity.ejecting = false;
     }
 }

@@ -2,9 +2,9 @@ package com.mrcrayfish.goldenhopper;
 
 import com.mrcrayfish.goldenhopper.client.ClientHandler;
 import com.mrcrayfish.goldenhopper.core.ModItems;
-import com.mrcrayfish.goldenhopper.datagen.BlockTagGen;
-import com.mrcrayfish.goldenhopper.datagen.LootTableGen;
-import com.mrcrayfish.goldenhopper.datagen.RecipeGen;
+import com.mrcrayfish.goldenhopper.data.ForgeBlockTagGen;
+import com.mrcrayfish.goldenhopper.data.ForgeLootTableGen;
+import com.mrcrayfish.goldenhopper.data.ForgeRecipeGen;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -38,9 +38,9 @@ public class GoldenHopper
     {
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
-        generator.addProvider(event.includeServer(), new RecipeGen(output));
-        generator.addProvider(event.includeServer(), new LootTableGen(output));
-        generator.addProvider(event.includeServer(), new BlockTagGen(output, event.getLookupProvider(), event.getExistingFileHelper()));
+        generator.addProvider(event.includeServer(), new ForgeRecipeGen(output));
+        generator.addProvider(event.includeServer(), new ForgeLootTableGen(output));
+        generator.addProvider(event.includeServer(), new ForgeBlockTagGen(output, event.getLookupProvider(), event.getExistingFileHelper()));
     }
 
     private void onCreativeTabBuilding(BuildCreativeModeTabContentsEvent event)

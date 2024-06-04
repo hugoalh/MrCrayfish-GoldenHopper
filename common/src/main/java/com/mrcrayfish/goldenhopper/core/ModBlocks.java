@@ -3,7 +3,7 @@ package com.mrcrayfish.goldenhopper.core;
 import com.mrcrayfish.framework.api.registry.RegistryContainer;
 import com.mrcrayfish.framework.api.registry.RegistryEntry;
 import com.mrcrayfish.goldenhopper.Constants;
-import com.mrcrayfish.goldenhopper.world.level.block.GoldenHopperBlock;
+import com.mrcrayfish.goldenhopper.block.GoldenHopperBlock;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;

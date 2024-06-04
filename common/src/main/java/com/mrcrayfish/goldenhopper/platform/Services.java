@@ -1,10 +1,12 @@
 package com.mrcrayfish.goldenhopper.platform;
 
 import com.mrcrayfish.goldenhopper.Constants;
-import com.mrcrayfish.goldenhopper.platform.services.IPlatformHelper;
 
 import java.util.ServiceLoader;
 
+/**
+ * Author: MrCrayfish
+ */
 public class Services
 {
     public static final IPlatformHelper PLATFORM = load(IPlatformHelper.class);

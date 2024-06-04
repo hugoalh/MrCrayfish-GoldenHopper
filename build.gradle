@@ -1,6 +1,12 @@
+plugins {
+    id "org.jetbrains.gradle.plugin.idea-ext" version "1.1.7"
+}
+
 subprojects {
     apply plugin: 'java'
     apply plugin: 'signing'
+
+    version = "${minecraft_version}-${mod_version}"
 
     java.toolchain.languageVersion = JavaLanguageVersion.of(17)
     java.withSourcesJar()
@@ -12,7 +18,7 @@ subprojects {
 
     jar {
         from(rootProject.file("LICENSE")) {
-            rename { "${it}_" + mod_name.replaceAll("\\s++", "") }
+            rename { "${it}_${mod_name}" }
         }
         manifest {
             attributes([
@@ -32,7 +38,7 @@ subprojects {
 
     sourcesJar {
         from(rootProject.file("LICENSE")) {
-            rename { "${it}_" + mod_name.replaceAll("\\s++", "") }
+            rename { "${it}_${mod_name}" }
         }
     }
 
@@ -66,7 +72,35 @@ subprojects {
 
     tasks.withType(JavaCompile).configureEach {
         it.options.encoding = 'UTF-8'
-        it.options.release = 17
+        it.options.release.set(17)
+    }
+
+    processResources {
+        def expandProps = [
+                "group": project.group,
+                "minecraft_version": minecraft_version,
+                "forge_version": forge_version,
+                "fabric_version": fabric_version,
+                "fabric_loader_version": fabric_loader_version,
+                "neoforge_version": neoforge_version,
+                "neoforge_version_range": neoforge_version_range,
+                "neoforge_loader_version_range": neoforge_loader_version_range,
+                "framework_version": framework_version,
+                "catalogue_version": catalogue_version,
+                "mod_name": mod_name,
+                "mod_version": mod_version,
+                "mod_author": mod_author,
+                "mod_id": mod_id,
+                "mod_license": mod_license,
+                "mod_desc": mod_desc,
+                "mod_homepage": mod_homepage,
+                "mod_source": mod_source,
+                "mod_issues": mod_issues
+        ]
+        filesMatching(['pack.mcmeta', 'fabric.mod.json', 'META-INF/mods.toml', '*.mixins.json']) {
+            expand expandProps
+        }
+        inputs.properties(expandProps)
     }
 
     // Disables Gradle's custom module metadata from being published to maven. The
@@ -75,9 +109,14 @@ subprojects {
     tasks.withType(GenerateModuleMetadata) {
         enabled = false
     }
+
+    // Mutes javadoc warnings
+    tasks.withType(Javadoc).configureEach {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
 }
 
-task incrementBuild {
+tasks.register('incrementBuild') {
     doLast {
         int version = file('/release_build').text.toInteger()
         file('/release_build').text = version + 1

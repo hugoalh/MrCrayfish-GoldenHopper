@@ -3,7 +3,7 @@ package com.mrcrayfish.goldenhopper.core;
 import com.mrcrayfish.framework.api.registry.RegistryContainer;
 import com.mrcrayfish.framework.api.registry.RegistryEntry;
 import com.mrcrayfish.goldenhopper.Constants;
-import com.mrcrayfish.goldenhopper.world.inventory.GoldenHopperMenu;
+import com.mrcrayfish.goldenhopper.inventory.GoldenHopperMenu;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.MenuType;
 
