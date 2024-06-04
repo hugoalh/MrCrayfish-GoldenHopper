@@ -22,9 +22,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ForgeLootTableGen extends LootTableProvider
+public class NeoForgeLootTableGen extends LootTableProvider
 {
-    public ForgeLootTableGen(PackOutput output)
+    public NeoForgeLootTableGen(PackOutput output)
     {
         super(output, Set.of(), List.of(new SubProviderEntry(Block::new, LootContextParamSets.BLOCK)));
     }

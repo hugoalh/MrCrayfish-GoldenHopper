@@ -19,12 +19,4 @@ public class CommonLootTableProvider
             builder.self(ModBlocks.GOLDEN_HOPPER.get());
         }
     }
-
-    public static class Entity
-    {
-        public static void accept(LootBuilder.Entity builder)
-        {
-            builder.add(ModEntities.GOLDEN_HOPPER_MINECART.get(), LootTable.lootTable());
-        }
-    }
 }

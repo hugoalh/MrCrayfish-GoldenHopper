@@ -36,3 +36,4 @@ rootProject.name = 'GoldenHopper'
 include("common")
 includeModloader("forge")
 includeModloader("fabric")
+includeModloader("neoforge")
