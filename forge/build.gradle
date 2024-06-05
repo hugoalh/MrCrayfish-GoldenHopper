@@ -61,13 +61,13 @@ dependencies {
     annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
 }
 
-/*jar {
+jar {
     manifest {
         attributes([
             'MixinConfigs': "${mod_id}.common.mixins.json"
         ])
     }
-}*/
+}
 
 tasks.register('signJar', SignJar) {
     dependsOn jar
