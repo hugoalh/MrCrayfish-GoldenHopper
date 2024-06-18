@@ -15,5 +15,5 @@ import net.minecraft.world.level.material.MapColor;
 @RegistryContainer
 public class ModBlocks
 {
-    public static final RegistryEntry<Block> GOLDEN_HOPPER = RegistryEntry.block(new ResourceLocation(Constants.MOD_ID, "golden_hopper"), () -> new GoldenHopperBlock(Block.Properties.of().sound(SoundType.METAL).mapColor(MapColor.GOLD).strength(2.0F)));
+    public static final RegistryEntry<Block> GOLDEN_HOPPER = RegistryEntry.block(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "golden_hopper"), () -> new GoldenHopperBlock(Block.Properties.of().sound(SoundType.METAL).mapColor(MapColor.GOLD).strength(2.0F)));
 }

@@ -1,11 +1,6 @@
 package com.mrcrayfish.goldenhopper.data;
 
 import com.mrcrayfish.goldenhopper.core.ModBlocks;
-import com.mrcrayfish.goldenhopper.core.ModEntities;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootTable;
-
-import java.util.function.Consumer;
 
 /**
  * Author: MrCrayfish

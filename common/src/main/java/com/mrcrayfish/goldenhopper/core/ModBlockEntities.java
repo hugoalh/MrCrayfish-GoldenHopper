@@ -14,5 +14,5 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 @RegistryContainer
 public class ModBlockEntities
 {
-    public static final RegistryEntry<BlockEntityType<GoldenHopperBlockEntity>> GOLDEN_HOPPER = RegistryEntry.blockEntity(new ResourceLocation(Constants.MOD_ID, "golden_hopper"), GoldenHopperBlockEntity::new, () -> new Block[]{ModBlocks.GOLDEN_HOPPER.get()});
+    public static final RegistryEntry<BlockEntityType<GoldenHopperBlockEntity>> GOLDEN_HOPPER = RegistryEntry.blockEntity(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "golden_hopper"), GoldenHopperBlockEntity::new, () -> new Block[]{ModBlocks.GOLDEN_HOPPER.get()});
 }

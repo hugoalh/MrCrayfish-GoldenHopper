@@ -1,9 +1,9 @@
 package com.mrcrayfish.goldenhopper.client;
 
-import com.mrcrayfish.goldenhopper.inventory.GoldenHopperScreen;
 import com.mrcrayfish.goldenhopper.core.ModContainers;
 import com.mrcrayfish.goldenhopper.core.ModEntities;
 import com.mrcrayfish.goldenhopper.core.ModItems;
+import com.mrcrayfish.goldenhopper.inventory.GoldenHopperScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;

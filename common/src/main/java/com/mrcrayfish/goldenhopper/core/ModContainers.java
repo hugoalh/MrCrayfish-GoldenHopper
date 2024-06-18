@@ -13,5 +13,5 @@ import net.minecraft.world.inventory.MenuType;
 @RegistryContainer
 public class ModContainers
 {
-    public static final RegistryEntry<MenuType<GoldenHopperMenu>> GOLDEN_HOPPER = RegistryEntry.menuType(new ResourceLocation(Constants.MOD_ID, "golden_hopper"), GoldenHopperMenu::new);
+    public static final RegistryEntry<MenuType<GoldenHopperMenu>> GOLDEN_HOPPER = RegistryEntry.menuType(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "golden_hopper"), GoldenHopperMenu::new);
 }

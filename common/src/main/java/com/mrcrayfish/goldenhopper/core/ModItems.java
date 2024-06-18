@@ -15,6 +15,6 @@ import net.minecraft.world.item.MinecartItem;
 @RegistryContainer
 public class ModItems
 {
-    public static final RegistryEntry<Item> GOLDEN_HOPPER = RegistryEntry.item(new ResourceLocation(Constants.MOD_ID, "golden_hopper"), () -> new BlockItem(ModBlocks.GOLDEN_HOPPER.get(), new Item.Properties()));
-    public static final RegistryEntry<Item> GOLDEN_HOPPER_MINECART = RegistryEntry.item(new ResourceLocation(Constants.MOD_ID, "golden_hopper_minecart"), () -> new MinecartItem(AbstractMinecart.Type.HOPPER, new Item.Properties().stacksTo(1)));
+    public static final RegistryEntry<Item> GOLDEN_HOPPER = RegistryEntry.item(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "golden_hopper"), () -> new BlockItem(ModBlocks.GOLDEN_HOPPER.get(), new Item.Properties()));
+    public static final RegistryEntry<Item> GOLDEN_HOPPER_MINECART = RegistryEntry.item(ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "golden_hopper_minecart"), () -> new MinecartItem(AbstractMinecart.Type.HOPPER, new Item.Properties().stacksTo(1)));
 }

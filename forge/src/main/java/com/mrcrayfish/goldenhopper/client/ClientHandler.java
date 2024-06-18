@@ -1,8 +1,8 @@
 package com.mrcrayfish.goldenhopper.client;
 
-import com.mrcrayfish.goldenhopper.inventory.GoldenHopperScreen;
 import com.mrcrayfish.goldenhopper.core.ModContainers;
 import com.mrcrayfish.goldenhopper.core.ModEntities;
+import com.mrcrayfish.goldenhopper.inventory.GoldenHopperScreen;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.model.geom.ModelLayers;
 import net.minecraft.client.renderer.entity.EntityRenderers;

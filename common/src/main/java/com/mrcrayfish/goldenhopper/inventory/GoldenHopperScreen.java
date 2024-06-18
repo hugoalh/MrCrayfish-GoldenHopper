@@ -12,7 +12,7 @@ import net.minecraft.world.entity.player.Inventory;
  */
 public class GoldenHopperScreen extends AbstractContainerScreen<GoldenHopperMenu>
 {
-    private static final ResourceLocation GUI_TEXTURE = new ResourceLocation(Constants.MOD_ID, "textures/gui/container/golden_hopper.png");
+    private static final ResourceLocation GUI_TEXTURE = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "textures/gui/container/golden_hopper.png");
 
     public GoldenHopperScreen(GoldenHopperMenu container, Inventory playerInventory, Component titleIn)
     {

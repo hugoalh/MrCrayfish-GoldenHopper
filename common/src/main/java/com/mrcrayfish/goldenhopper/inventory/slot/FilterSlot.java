@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class FilterSlot extends Slot
 {
-    private static final ResourceLocation EMPTY_SLOT_FILTER = new ResourceLocation(Constants.MOD_ID, "item/empty_slot_filter");
+    private static final ResourceLocation EMPTY_SLOT_FILTER = ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "item/empty_slot_filter");
 
     public FilterSlot(Container container, int index, int x, int y)
     {
