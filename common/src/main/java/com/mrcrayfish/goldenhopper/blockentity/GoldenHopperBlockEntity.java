@@ -11,6 +11,7 @@ import net.minecraft.world.WorldlyContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +34,12 @@ public class GoldenHopperBlockEntity extends HopperBlockEntity implements Worldl
         super(pos, state);
         this.setItems(NonNullList.withSize(CONTAINER_SIZE, ItemStack.EMPTY));
         ((BlockEntityTypeSetter) this).goldenHopper$SetType(ModBlockEntities.GOLDEN_HOPPER.get());
+    }
+
+    @Override
+    public BlockEntityType<?> getType()
+    {
+        return ModBlockEntities.GOLDEN_HOPPER.get();
     }
 
     @Override
