@@ -43,7 +43,7 @@ public abstract class BlockEntityMixin implements BlockEntityTypeSetter
     {
         BlockEntity entity = (BlockEntity) (Object) this;
         // getType() is overridden in GoldenHopperBlockEntity, so we can perform the correct check
-        if(state.is(ModBlocks.GOLDEN_HOPPER.get()) && entity.getType().isValid(state))
+        if(entity instanceof GoldenHopperBlockEntity && state.is(ModBlocks.GOLDEN_HOPPER.get()) && entity.getType().isValid(state))
         {
             ci.cancel();
         }
