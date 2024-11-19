@@ -23,11 +23,10 @@ import java.util.stream.IntStream;
  */
 public class GoldenHopperBlockEntity extends HopperBlockEntity implements WorldlyContainer
 {
+    public static final int CONTAINER_SIZE = 6;
+    public static final int FILTER_SLOT_INDEX = 0;
+    public static final int[] TRANSFERABLE_SLOTS = IntStream.range(1, CONTAINER_SIZE).toArray();
     public static boolean ejecting = false;
-
-    private static final int CONTAINER_SIZE = 6;
-    private static final int FILTER_SLOT_INDEX = 0;
-    private static final int[] TRANSFERABLE_SLOTS = IntStream.range(1, CONTAINER_SIZE).toArray();
 
     public GoldenHopperBlockEntity(BlockPos pos, BlockState state)
     {

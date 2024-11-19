@@ -5,8 +5,10 @@ import com.mrcrayfish.goldenhopper.blockentity.GoldenHopperBlockEntity;
 import com.mrcrayfish.goldenhopper.core.ModBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.stats.Stats;
+import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.HopperBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -16,6 +18,8 @@ import net.minecraft.world.level.block.entity.HopperBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.stream.IntStream;
 
 /**
  * Author: MrCrayfish
@@ -63,5 +67,20 @@ public class GoldenHopperBlock extends HopperBlock
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type)
     {
         return !level.isClientSide() ? createTickerHelper(type, ModBlockEntities.GOLDEN_HOPPER.get(), HopperBlockEntity::pushItemsTick) : null;
+    }
+
+    @Override
+    protected int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos)
+    {
+        if(level.getBlockEntity(pos) instanceof GoldenHopperBlockEntity hopper)
+        {
+            float strength = (float) IntStream.range(0, hopper.getContainerSize())
+                .filter(slot -> slot != GoldenHopperBlockEntity.FILTER_SLOT_INDEX) // Ignore the filter slot
+                .mapToObj(hopper::getItem) // Get the stack in the slot
+                .mapToDouble(stack -> Math.clamp((double) stack.getCount() / hopper.getMaxStackSize(stack), 0, 1)) // Get normalised value of count vs max stack size
+                .average().orElse(0); // Get the average of all the results
+            return Mth.lerpDiscrete(strength, 0, 15);
+        }
+        return 0;
     }
 }
