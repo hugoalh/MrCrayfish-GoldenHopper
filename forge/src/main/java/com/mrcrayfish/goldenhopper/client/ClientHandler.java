@@ -17,6 +17,6 @@ public class ClientHandler
     {
         MenuScreens.register(ModContainers.GOLDEN_HOPPER.get(), GoldenHopperScreen::new);
         EntityRenderers.register(ModEntities.GOLDEN_HOPPER_MINECART.get(), context ->
-                new MinecartRenderer<>(context, ModelLayers.HOPPER_MINECART));
+                new MinecartRenderer(context, ModelLayers.HOPPER_MINECART));
     }
 }

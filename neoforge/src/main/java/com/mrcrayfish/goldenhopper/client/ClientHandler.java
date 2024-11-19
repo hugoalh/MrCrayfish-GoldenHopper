@@ -24,7 +24,7 @@ public final class ClientHandler
     {
         event.enqueueWork(() -> {
             EntityRenderers.register(ModEntities.GOLDEN_HOPPER_MINECART.get(), context ->
-                new MinecartRenderer<>(context, ModelLayers.HOPPER_MINECART));
+                new MinecartRenderer(context, ModelLayers.HOPPER_MINECART));
         });
     }
 

@@ -23,9 +23,9 @@ public class ClientHandler implements ClientModInitializer
     {
         MenuScreens.register(ModContainers.GOLDEN_HOPPER.get(), GoldenHopperScreen::new);
         EntityRendererRegistry.register(ModEntities.GOLDEN_HOPPER_MINECART.get(), context ->
-                new MinecartRenderer<>(context, ModelLayers.HOPPER_MINECART));
+                new MinecartRenderer(context, ModelLayers.HOPPER_MINECART));
         ItemGroupEvents.MODIFY_ENTRIES_ALL.register((group, entries) -> {
-            if(group == BuiltInRegistries.CREATIVE_MODE_TAB.get(CreativeModeTabs.REDSTONE_BLOCKS)) {
+            if(group == BuiltInRegistries.CREATIVE_MODE_TAB.getValue(CreativeModeTabs.REDSTONE_BLOCKS)) {
                 entries.accept(ModItems.GOLDEN_HOPPER::get);
                 entries.accept(ModItems.GOLDEN_HOPPER_MINECART::get);
             }

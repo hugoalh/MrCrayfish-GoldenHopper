@@ -24,4 +24,4 @@ run
 .cache
 neoforge/runs
 forge/runs
-src/generated/*
+*/src/generated/*

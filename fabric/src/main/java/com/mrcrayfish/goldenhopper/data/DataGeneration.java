@@ -12,9 +12,9 @@ public class DataGeneration implements DataGeneratorEntrypoint
     public void onInitializeDataGenerator(FabricDataGenerator generator)
     {
         FabricDataGenerator.Pack pack = generator.createPack();
-        pack.addProvider(FabricLootTableGen::new);
-        pack.addProvider(FabricRecipeGen::new);
-        pack.addProvider(FabricBlockTagGen::new);
-        pack.addProvider(FabricItemTagGen::new);
+        pack.addProvider(CommonLootTableProvider::new);
+        pack.addProvider(CommonRecipeProvider.Runner::new);
+        CommonBlockTagsProvider blockTagsProvider = pack.addProvider(CommonBlockTagsProvider::new);
+        pack.addProvider((output, registriesFuture) -> new CommonItemTagsProvider(output, registriesFuture, blockTagsProvider.contentsGetter()));
     }
 }

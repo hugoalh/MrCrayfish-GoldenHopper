@@ -2,10 +2,10 @@ package com.mrcrayfish.goldenhopper;
 
 import com.mrcrayfish.goldenhopper.client.ClientHandler;
 import com.mrcrayfish.goldenhopper.core.ModItems;
-import com.mrcrayfish.goldenhopper.data.ForgeBlockTagGen;
-import com.mrcrayfish.goldenhopper.data.ForgeItemTagGen;
-import com.mrcrayfish.goldenhopper.data.ForgeLootTableGen;
-import com.mrcrayfish.goldenhopper.data.ForgeRecipeGen;
+import com.mrcrayfish.goldenhopper.data.CommonBlockTagsProvider;
+import com.mrcrayfish.goldenhopper.data.CommonItemTagsProvider;
+import com.mrcrayfish.goldenhopper.data.CommonLootTableProvider;
+import com.mrcrayfish.goldenhopper.data.CommonRecipeProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
@@ -25,9 +25,9 @@ import java.util.concurrent.CompletableFuture;
 @Mod(Constants.MOD_ID)
 public class GoldenHopper
 {
-    public GoldenHopper()
+    public GoldenHopper(FMLJavaModLoadingContext context)
     {
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+        IEventBus bus = context.getModEventBus();
         bus.addListener(this::onClientSetup);
         bus.addListener(this::onGatherData);
         bus.addListener(this::onCreativeTabBuilding);
@@ -43,11 +43,10 @@ public class GoldenHopper
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-        generator.addProvider(event.includeServer(), new ForgeRecipeGen(output, lookupProvider));
-        generator.addProvider(event.includeServer(), new ForgeLootTableGen(output, lookupProvider));
-        ForgeBlockTagGen blockTagGen = new ForgeBlockTagGen(output, lookupProvider, event.getExistingFileHelper());
-        generator.addProvider(event.includeServer(), blockTagGen);
-        generator.addProvider(event.includeServer(), new ForgeItemTagGen(output, lookupProvider, blockTagGen.contentsGetter(), event.getExistingFileHelper()));
+        generator.addProvider(event.includeServer(), new CommonRecipeProvider.Runner(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new CommonLootTableProvider(output, lookupProvider));
+        CommonBlockTagsProvider blockTagGen = generator.addProvider(event.includeServer(), new CommonBlockTagsProvider(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new CommonItemTagsProvider(output, lookupProvider, blockTagGen.contentsGetter()));
     }
 
     private void onCreativeTabBuilding(BuildCreativeModeTabContentsEvent event)

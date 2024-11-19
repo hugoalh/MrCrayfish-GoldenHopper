@@ -22,10 +22,9 @@ public class DataGeneration
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
         CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-        generator.addProvider(event.includeServer(), new NeoForgeRecipeGen(output, lookupProvider));
-        generator.addProvider(event.includeServer(), new NeoForgeLootTableGen(output, lookupProvider));
-        NeoForgeBlockTagGen blockTagGen = new NeoForgeBlockTagGen(output, lookupProvider, event.getExistingFileHelper());
-        generator.addProvider(event.includeServer(), blockTagGen);
-        generator.addProvider(event.includeServer(), new NeoForgeItemTagGen(output, lookupProvider, blockTagGen.contentsGetter(), event.getExistingFileHelper()));
+        generator.addProvider(event.includeServer(), new CommonRecipeProvider.Runner(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new CommonLootTableProvider(output, lookupProvider));
+        CommonBlockTagsProvider blockTagGen = generator.addProvider(event.includeServer(), new CommonBlockTagsProvider(output, lookupProvider));
+        generator.addProvider(event.includeServer(), new CommonItemTagsProvider(output, lookupProvider, blockTagGen.contentsGetter()));
     }
 }

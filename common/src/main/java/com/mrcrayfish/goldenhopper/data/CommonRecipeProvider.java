@@ -4,35 +4,38 @@ import com.mrcrayfish.goldenhopper.core.ModBlocks;
 import com.mrcrayfish.goldenhopper.core.ModItems;
 import com.mrcrayfish.goldenhopper.platform.Services;
 import net.minecraft.advancements.Criterion;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 /**
  * Author: MrCrayfish
  */
-public class CommonRecipeProvider
+public class CommonRecipeProvider extends RecipeProvider
 {
-    private final RecipeOutput output;
-    private final Function<ItemLike, Criterion<?>> hasItem;
-    private final Function<TagKey<Item>, Criterion<?>> hasTag;
+    private final HolderLookup.RegistryLookup<Item> items;
 
-    public CommonRecipeProvider(RecipeOutput output, Function<ItemLike, Criterion<?>> hasItem, Function<TagKey<Item>, Criterion<?>> hasTag)
+    public CommonRecipeProvider(HolderLookup.Provider provider, RecipeOutput output)
     {
-        this.output = output;
-        this.hasItem = hasItem;
-        this.hasTag = hasTag;
+        super(provider, output);
+        this.items = provider.lookupOrThrow(Registries.ITEM);
     }
 
-    public void run()
+    @Override
+    public void buildRecipes()
     {
-        ShapedRecipeBuilder.shaped(RecipeCategory.REDSTONE, ModBlocks.GOLDEN_HOPPER.get())
+        ShapedRecipeBuilder.shaped(this.items, RecipeCategory.REDSTONE, ModBlocks.GOLDEN_HOPPER.get())
             .pattern("ICI")
             .pattern("IHI")
             .pattern("RIR")
@@ -40,19 +43,39 @@ public class CommonRecipeProvider
             .define('R', Items.REDSTONE)
             .define('H', Items.HOPPER)
             .define('C', Items.COMPARATOR)
-            .unlockedBy("has_gold_ingot", this.hasTag.apply(Services.PLATFORM.getGoldIngotsTag()))
-            .unlockedBy("has_redstone", this.hasItem.apply(Items.REDSTONE))
-            .unlockedBy("has_comparator", this.hasItem.apply(Items.COMPARATOR))
-            .unlockedBy("has_hopper", this.hasItem.apply(Items.HOPPER))
+            .unlockedBy("has_gold_ingot", this.has(Services.PLATFORM.getGoldIngotsTag()))
+            .unlockedBy("has_redstone", this.has(Items.REDSTONE))
+            .unlockedBy("has_comparator", this.has(Items.COMPARATOR))
+            .unlockedBy("has_hopper", this.has(Items.HOPPER))
             .save(this.output);
 
-        ShapedRecipeBuilder.shaped(RecipeCategory.TRANSPORTATION, ModItems.GOLDEN_HOPPER_MINECART.get())
+        ShapedRecipeBuilder.shaped(this.items, RecipeCategory.TRANSPORTATION, ModItems.GOLDEN_HOPPER_MINECART.get())
             .pattern("A")
             .pattern("B")
             .define('A', ModBlocks.GOLDEN_HOPPER.get())
             .define('B', Items.MINECART)
-            .unlockedBy("has_gold_ingot", this.hasTag.apply(Services.PLATFORM.getGoldIngotsTag()))
-            .unlockedBy("has_minecart", this.hasItem.apply(Items.MINECART))
+            .unlockedBy("has_gold_ingot", this.has(Services.PLATFORM.getGoldIngotsTag()))
+            .unlockedBy("has_minecart", this.has(Items.MINECART))
             .save(this.output);
+    }
+
+    public static final class Runner extends RecipeProvider.Runner
+    {
+        public Runner(PackOutput output, CompletableFuture<HolderLookup.Provider> completableFuture)
+        {
+            super(output, completableFuture);
+        }
+
+        @Override
+        protected RecipeProvider createRecipeProvider(HolderLookup.Provider provider, RecipeOutput output)
+        {
+            return new CommonRecipeProvider(provider, output);
+        }
+
+        @Override
+        public String getName()
+        {
+            return "Golden Hopper Recipes";
+        }
     }
 }
